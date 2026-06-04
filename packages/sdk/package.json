@@ -1,0 +1,72 @@
+{
+  "name": "@byomsdk/sdk",
+  "version": "0.1.0",
+  "description": "Bring Your Own Model - SDK for accessing user-owned AI providers via the Bring Your Model browser extension",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.cjs"
+      }
+    },
+    "./types": {
+      "types": "./dist/index.d.ts"
+    },
+    "./iife": "./dist/byom.iife.min.global.js",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "lint": "eslint src",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
+    "check:bundle": "node ./scripts/check-iife-budget.mjs",
+    "prepublishOnly": "pnpm run build"
+  },
+  "devDependencies": {
+    "@byom/shared": "workspace:*",
+    "jsdom": "^25.0.1",
+    "tsup": "^8.3.0",
+    "typescript": "^5.7.0",
+    "vitest": "^2.1.0"
+  },
+  "keywords": [
+    "ai",
+    "llm",
+    "openai",
+    "anthropic",
+    "ollama",
+    "browser-extension",
+    "bring-your-own-model"
+  ],
+  "author": "Bring Your Model Team",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/indraai/bringyourmodel.git",
+    "directory": "packages/sdk"
+  },
+  "homepage": "https://bringyourmodel.com",
+  "bugs": {
+    "url": "https://github.com/indraai/bringyourmodel/issues"
+  }
+}

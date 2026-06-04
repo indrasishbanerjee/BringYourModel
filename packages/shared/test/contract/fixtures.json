@@ -1,0 +1,167 @@
+{
+  "bridgeRequests": [
+    {
+      "name": "ask-request",
+      "value": {
+        "reqId": "1700000000000-abc123def",
+        "origin": "https://demo.example.com",
+        "protocolVersion": "1.0.0",
+        "nonce": "0123456789abcdef0123456789abcdef",
+        "timestamp": 1700000000000,
+        "task": "ask",
+        "payload": {
+          "input": "Summarize this paragraph.",
+          "model": "gpt-4o-mini",
+          "maxTokens": 512
+        }
+      }
+    },
+    {
+      "name": "stream-request",
+      "value": {
+        "reqId": "1700000000001-stream001",
+        "origin": "https://demo.example.com",
+        "protocolVersion": "1.0.0",
+        "nonce": "fedcba9876543210fedcba9876543210",
+        "timestamp": 1700000000001,
+        "task": "stream",
+        "payload": {
+          "input": "Write a short poem.",
+          "temperature": 0.7
+        }
+      }
+    },
+    {
+      "name": "embed-request",
+      "value": {
+        "reqId": "1700000000002-embed001",
+        "origin": "https://demo.example.com",
+        "protocolVersion": "1.0.0",
+        "nonce": "aaaabbbbccccddddeeeeffff00001111",
+        "timestamp": 1700000000002,
+        "task": "embed",
+        "payload": {
+          "input": "vector me",
+          "model": "text-embedding-3-small"
+        }
+      }
+    },
+    {
+      "name": "classify-request",
+      "value": {
+        "reqId": "1700000000003-classify1",
+        "origin": "https://demo.example.com",
+        "protocolVersion": "1.0.0",
+        "nonce": "11112222333344445555666677778888",
+        "timestamp": 1700000000003,
+        "task": "classify",
+        "payload": {
+          "input": "I love this product!",
+          "categories": ["positive", "negative", "neutral"]
+        }
+      }
+    },
+    {
+      "name": "chat-request",
+      "value": {
+        "reqId": "1700000000004-chat0001",
+        "origin": "https://demo.example.com",
+        "protocolVersion": "1.0.0",
+        "nonce": "99998888777766665555444433332222",
+        "timestamp": 1700000000004,
+        "task": "chat",
+        "payload": {
+          "message": "Hello there",
+          "sessionId": "chat-1700000000004-xyz"
+        }
+      }
+    }
+  ],
+  "bridgeResponses": [
+    {
+      "name": "ask-response",
+      "value": {
+        "reqId": "1700000000000-abc123def",
+        "kind": "response",
+        "timestamp": 1700000000100,
+        "payload": {
+          "text": "Here is a summary.",
+          "model": "gpt-4o-mini",
+          "provider": "openai",
+          "usage": {
+            "inputTokens": 12,
+            "outputTokens": 24,
+            "totalTokens": 36
+          },
+          "costUSD": 0.0001,
+          "latencyMs": 420
+        }
+      }
+    },
+    {
+      "name": "stream-delta",
+      "value": {
+        "reqId": "1700000000001-stream001",
+        "kind": "delta",
+        "timestamp": 1700000000200,
+        "payload": {
+          "text": "Once upon",
+          "isComplete": false
+        }
+      }
+    },
+    {
+      "name": "stream-finish",
+      "value": {
+        "reqId": "1700000000001-stream001",
+        "kind": "finish",
+        "timestamp": 1700000000300,
+        "payload": {
+          "model": "gpt-4o-mini",
+          "provider": "openai",
+          "usage": {
+            "inputTokens": 8,
+            "outputTokens": 16,
+            "totalTokens": 24
+          },
+          "costUSD": 0.00008,
+          "latencyMs": 900
+        }
+      }
+    },
+    {
+      "name": "error-response",
+      "value": {
+        "reqId": "1700000000000-abc123def",
+        "kind": "error",
+        "timestamp": 1700000000400,
+        "payload": {
+          "code": "PERMISSION_DENIED",
+          "message": "Site not approved"
+        }
+      }
+    }
+  ],
+  "portMessages": [
+    {
+      "name": "heartbeat",
+      "value": {
+        "type": "heartbeat",
+        "timestamp": 1700000000500
+      }
+    },
+    {
+      "name": "request-port-message",
+      "value": {
+        "type": "request",
+        "reqId": "1700000000000-abc123def",
+        "origin": "https://demo.example.com",
+        "timestamp": 1700000000000,
+        "payload": {
+          "task": "ask",
+          "input": "hello"
+        }
+      }
+    }
+  ]
+}

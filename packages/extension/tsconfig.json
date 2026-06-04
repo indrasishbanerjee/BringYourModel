@@ -1,0 +1,20 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "./.output",
+    "jsx": "react-jsx",
+    "types": ["chrome", "wxt/vite-builder-env"]
+  },
+  "references": [
+    { "path": "../shared" }
+  ],
+  "include": [
+    ".wxt/wxt.d.ts",
+    "entrypoints/**/*",
+    "modules/**/*",
+    "components/**/*",
+    "hooks/**/*",
+    "utils/**/*"
+  ],
+  "exclude": ["node_modules", ".output"]
+}

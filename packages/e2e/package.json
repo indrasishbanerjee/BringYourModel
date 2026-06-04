@@ -1,0 +1,16 @@
+{
+  "name": "@byom/e2e",
+  "version": "0.0.0",
+  "private": true,
+  "description": "End-to-end tests for Bring Your Model",
+  "type": "module",
+  "scripts": {
+    "test": "playwright test",
+    "test:ui": "playwright test --ui",
+    "test:debug": "playwright test --debug"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.49.0",
+    "playwright": "^1.49.0"
+  }
+}

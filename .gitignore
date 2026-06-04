@@ -1,0 +1,35 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+packages/extension/.output/
+packages/extension/.zip/
+
+# TypeScript incremental build cache
+*.tsbuildinfo
+
+# Test artifacts
+packages/e2e/test-results/
+packages/e2e/playwright-report/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor / IDE
+.vscode/settings.json
+.idea/
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# Temporary
+*.tmp
+*.temp
