@@ -1,6 +1,6 @@
 {
   "name": "@byomsdk/sdk",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Bring Your Own Model - SDK for accessing user-owned AI providers via the Bring Your Model browser extension",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -62,11 +62,11 @@
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/indraai/bringyourmodel.git",
+    "url": "git+https://github.com/indrasishbanerjee/BringYourModel.git",
     "directory": "packages/sdk"
   },
-  "homepage": "https://bringyourmodel.com",
+  "homepage": "https://github.com/indrasishbanerjee/BringYourModel#readme",
   "bugs": {
-    "url": "https://github.com/indraai/bringyourmodel/issues"
+    "url": "https://github.com/indrasishbanerjee/BringYourModel/issues"
   }
 }

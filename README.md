@@ -6,6 +6,14 @@
 
 Think **MetaMask for AI access** or **Stripe.js for inference**: the extension is the trust boundary; the site gets capabilities, not credentials.
 
+## Links
+
+| Resource | Link |
+|----------|------|
+| **Website** | [bringyourmodel.com](https://bringyourmodel.com) |
+| **Chrome Extension** | [Install from Chrome Web Store](https://chromewebstore.google.com/detail/jnpajlpoemfgehchogeboncaikdoggdd) |
+| **npm SDK** | [@byomsdk/sdk on npm](https://www.npmjs.com/package/@byomsdk/sdk) |
+
 ---
 
 ## Why BYOM
