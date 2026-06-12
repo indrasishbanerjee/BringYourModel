@@ -3,6 +3,7 @@ import {
   EventNames,
   PROTOCOL_VERSION,
   ErrorCode,
+  isProtocolCompatible,
   parseBridgeRequest,
   generateRequestId,
   type PortMessage,
@@ -182,14 +183,14 @@ export default defineContentScript({
         return;
       }
 
-      // Validate protocol version
-      if (request.protocolVersion !== PROTOCOL_VERSION) {
+      // Validate protocol version (same major = compatible)
+      if (!isProtocolCompatible(request.protocolVersion)) {
         dispatchOnRelay(EventNames.ERROR, {
           reqId: request.reqId,
           type: 'error',
           payload: {
             code: ErrorCode.PROTOCOL_VERSION_MISMATCH,
-            message: `Protocol version mismatch. Expected: ${PROTOCOL_VERSION}, got: ${request.protocolVersion}`,
+            message: `Protocol version mismatch. Expected major ${PROTOCOL_VERSION.split('.')[0]}, got: ${request.protocolVersion}`,
           },
         });
         return;

@@ -312,8 +312,11 @@ export default defineBackground({
     chrome.alarms.create('cleanupTelemetry', { periodInMinutes: 60 * 24 }); // Daily
     chrome.alarms.onAlarm.addListener(async (alarm) => {
       if (alarm.name === 'cleanupTelemetry') {
-        console.log('[BYOM] Running telemetry cleanup');
-        // Implementation for cleaning old data would go here
+        try {
+          await telemetryStore.deleteOlderThan(90);
+        } catch (err) {
+          console.error('[BYOM] Telemetry cleanup failed:', err);
+        }
       }
     });
 
@@ -340,6 +343,15 @@ async function handleRuntimeMessage(
   sender: chrome.runtime.MessageSender,
   sendResponse: (response?: any) => void
 ): Promise<void> {
+  // Dashboard RPC — extension pages only (block content scripts on web origins)
+  if (typeof message?.kind === 'string' && message.kind.startsWith('dashboard:')) {
+    const senderUrl = sender.url ?? '';
+    if (sender.id !== chrome.runtime.id || !senderUrl.startsWith('chrome-extension://')) {
+      sendResponse({ error: 'Unauthorized' });
+      return;
+    }
+  }
+
   // Dashboard RPC handlers - for Options page
   switch (message.kind) {
     // Provider management

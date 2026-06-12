@@ -1,9 +1,17 @@
 # Dependencies
 node_modules/
+package-lock.json
 
 # Build outputs
+dist/
+build/
+.output/
+.wxt/
 packages/extension/.output/
 packages/extension/.zip/
+*.zip
+*.crx
+*.pem
 
 # TypeScript incremental build cache
 *.tsbuildinfo
@@ -33,3 +41,10 @@ pnpm-debug.log*
 # Temporary
 *.tmp
 *.temp
+
+# Internal / local-only (do not commit)
+PROJECT_MEMORY.md
+*.plan.md
+.cursor/
+store/
+ai_wallet_browser_extension_product_idea.md

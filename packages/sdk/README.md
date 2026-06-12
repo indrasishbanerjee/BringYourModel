@@ -132,6 +132,56 @@ The IIFE build attaches `byom` to `window.byom`.
 
 `byom.destroy()` disconnects the bridge and resets global state. Use in tests or SPA unmount — not required for normal pages.
 
+## Progressive enhancement (fallback)
+
+```typescript
+import { createByomWithFallback, createInstallPromptState, getInstallUrl } from '@byomsdk/sdk';
+
+const ai = createByomWithFallback({
+  askFallback: async (req, signal) => {
+    const res = await fetch('/api/ai/ask', {
+      method: 'POST',
+      body: JSON.stringify(req),
+      signal,
+    });
+    return res.json();
+  },
+});
+
+const state = await createInstallPromptState();
+if (state.recommendedAction === 'install-extension') {
+  window.location.href = getInstallUrl();
+}
+```
+
+See [fallback strategy](../../docs/fallback-strategy.md).
+
+## OpenAI compatibility
+
+```typescript
+import { OpenAI } from '@byomsdk/sdk/openai';
+
+const client = new OpenAI();
+const completion = await client.chat.completions.create({
+  model: 'gpt-4o-mini',
+  messages: [{ role: 'user', content: 'Hello' }],
+});
+```
+
+See [OpenAI compat](../../docs/openai-compat.md).
+
+## Prompt API shim
+
+```typescript
+import { createPromptApi } from '@byomsdk/sdk/prompt-api';
+
+const ai = createPromptApi();
+const session = await ai.languageModel.create();
+const text = await session.prompt('Summarize this page.');
+```
+
+See [Prompt API compat](../../docs/prompt-api-compat.md).
+
 ## API reference
 
 Full API documentation: [docs/sdk-api.md](../../docs/sdk-api.md)

@@ -61,6 +61,31 @@ export {
   getClient,
 };
 
+export {
+  createByomWithFallback,
+  runWithByomFallback,
+  detectByomMode,
+  type ByomFallbackHandler,
+  type ByomMode,
+  type ByomWithFallback,
+  type CreateByomWithFallbackOptions,
+  type RunWithByomFallbackOptions,
+} from './fallback.js';
+
+export {
+  getInstallUrl,
+  createInstallPromptState,
+  DEFAULT_CHROME_WEB_STORE_URL,
+  DEFAULT_GITHUB_RELEASES_URL,
+  DEFAULT_INSTALL_URL,
+  DEFAULT_DEMO_URL,
+  DEFAULT_DOCS_URL,
+  type InstallUrlOptions,
+  type InstallPromptState,
+  type InstallPromptOptions,
+  type RecommendedAction,
+} from './install.js';
+
 /**
  * Check whether the Bring Your Model extension bridge responds.
  */

@@ -1,6 +1,9 @@
 import React from 'react';
 import type { Capabilities } from '@byomsdk/sdk';
 
+const INSTALL_URL =
+  'https://chromewebstore.google.com/detail/byom-wallet/jnpajlpoemfgehchogeboncaikdoggdd';
+
 interface ExtensionBannerProps {
   isAvailable: boolean | null;
   capabilities: Capabilities | null;
@@ -24,7 +27,13 @@ export const ExtensionBanner: React.FC<ExtensionBannerProps> = ({
         <span>Extension detected{capabilities ? ` (v${capabilities.extensionVersion})` : ''}</span>
       )}
       {isAvailable === false && (
-        <span>Extension not detected. Install the Bring Your Model extension and reload.</span>
+        <span>
+          Extension not detected.{' '}
+          <a href={INSTALL_URL} target="_blank" rel="noreferrer">
+            Install BYOM Wallet from Chrome Web Store
+          </a>{' '}
+          and reload this page.
+        </span>
       )}
     </div>
   );

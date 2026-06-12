@@ -219,6 +219,32 @@ export class TelemetryStore {
   }
 
   /**
+   * Delete usage records older than the given number of days (and prune aggregate tables).
+   */
+  async deleteOlderThan(days: number): Promise<number> {
+    const cutoff = Date.now() - days * 24 * 60 * 60 * 1000;
+    const cutoffDate = new Date(cutoff).toISOString().split('T')[0];
+
+    const staleUsage = await this.db.usage.where('timestamp').below(cutoff).toArray();
+    const staleIds = staleUsage.map((r) => r.id);
+    if (staleIds.length > 0) {
+      await this.db.usage.bulkDelete(staleIds);
+    }
+
+    const staleDaily = await this.db.dailyTotals.filter((r) => r.date < cutoffDate).toArray();
+    if (staleDaily.length > 0) {
+      await this.db.dailyTotals.bulkDelete(staleDaily.map((r) => r.id));
+    }
+
+    const staleProvider = await this.db.providerTotals.filter((r) => r.date < cutoffDate).toArray();
+    if (staleProvider.length > 0) {
+      await this.db.providerTotals.bulkDelete(staleProvider.map((r) => r.id));
+    }
+
+    return staleIds.length;
+  }
+
+  /**
    * Clear all telemetry data
    */
   async clearAll(): Promise<void> {

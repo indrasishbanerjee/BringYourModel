@@ -20,6 +20,8 @@ import {
 } from '../ui/theme';
 
 const dashboard = getDashboardClient();
+const EXTENSION_VERSION = chrome.runtime.getManifest().version;
+const PRIVACY_POLICY_URL = 'https://bringyourmodel.com/privacy';
 
 interface ProviderFormData {
   kind: ProviderId;
@@ -483,14 +485,50 @@ export const Popup: React.FC<PopupProps> = ({ variant = 'popup', summary }) => {
             Lock vault
           </button>
           <p style={{ margin: '12px 0 0', fontSize: 11, color: byomTheme.textSubtle, textAlign: 'center' }}>
-            bringyourmodel.com · v1.0.0
+            <a
+              href={PRIVACY_POLICY_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ color: byomTheme.textSubtle, textDecoration: 'underline' }}
+            >
+              Privacy
+            </a>
+            {' · '}
+            <a
+              href="https://bringyourmodel.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ color: byomTheme.textSubtle, textDecoration: 'none' }}
+            >
+              bringyourmodel.com
+            </a>
+            {' · v'}
+            {EXTENSION_VERSION}
           </p>
         </footer>
       )}
 
       {isSidepanel && (
         <p style={{ margin: '8px 0 0', fontSize: 10, color: byomTheme.textSubtle, textAlign: 'center' }}>
-          bringyourmodel.com · v1.0.0
+          <a
+            href={PRIVACY_POLICY_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ color: byomTheme.textSubtle, textDecoration: 'underline' }}
+          >
+            Privacy
+          </a>
+          {' · '}
+          <a
+            href="https://bringyourmodel.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ color: byomTheme.textSubtle, textDecoration: 'none' }}
+          >
+            bringyourmodel.com
+          </a>
+          {' · v'}
+          {EXTENSION_VERSION}
         </p>
       )}
       </div>

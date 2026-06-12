@@ -37,7 +37,7 @@ export const App: React.FC = () => {
         <p>
           This demo uses the <code>byom</code> SDK.{' '}
           <a
-            href="https://github.com/indraai/bringyourmodel/blob/main/docs/sdk-api.md"
+            href="https://github.com/indrasishbanerjee/BringYourModel/blob/main/docs/sdk-api.md"
             target="_blank"
             rel="noreferrer"
           >

@@ -1,0 +1,83 @@
+name: Extension Release
+
+on:
+  push:
+    tags:
+      - 'extension-v*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Extension version tag suffix (e.g. 1.0.0)'
+        required: true
+        default: '1.0.0'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9.15.0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Prepare WXT types
+        run: pnpm --filter @byom/extension exec wxt prepare
+
+      - name: Build extension
+        run: pnpm --filter @byom/extension build
+
+      - name: Zip extension
+        run: pnpm --filter @byom/extension zip
+
+      - name: Collect artifacts
+        id: artifacts
+        shell: bash
+        run: |
+          OUT_DIR="packages/extension/.output"
+          ZIP=$(find "$OUT_DIR" -maxdepth 1 -name '*-chrome.zip' | head -1)
+          if [ -z "$ZIP" ]; then
+            echo "No chrome zip found in $OUT_DIR"
+            ls -la "$OUT_DIR" || true
+            exit 1
+          fi
+          echo "zip=$ZIP" >> "$GITHUB_OUTPUT"
+          sha256sum "$ZIP" | tee checksums.txt
+          BASENAME=$(basename "$ZIP")
+          echo "name=$BASENAME" >> "$GITHUB_OUTPUT"
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.event_name == 'workflow_dispatch' && format('extension-v{0}', github.event.inputs.version) || github.ref_name }}
+          name: BYOM Wallet ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.version || github.ref_name }}
+          body: |
+            ## BYOM Wallet extension (Chrome MV3)
+
+            ### Install
+            1. Download the zip below and verify the checksum in `checksums.txt`.
+            2. Unzip and load unpacked in `chrome://extensions` (Developer mode).
+
+            See [docs/install.md](https://github.com/indrasishbanerjee/BringYourModel/blob/main/docs/install.md) for full instructions.
+
+            ### Artifacts
+            - `${{ steps.artifacts.outputs.name }}`
+          files: |
+            ${{ steps.artifacts.outputs.zip }}
+            checksums.txt
+          draft: false
+          prerelease: false

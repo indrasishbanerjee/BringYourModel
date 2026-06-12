@@ -1,8 +1,12 @@
 # Bring Your Model
 
+[![CI](https://github.com/indrasishbanerjee/BringYourModel/actions/workflows/ci.yml/badge.svg)](https://github.com/indrasishbanerjee/BringYourModel/actions/workflows/ci.yml)
+[![npm](https://img.shields.io/npm/v/@byomsdk/sdk)](https://www.npmjs.com/package/@byomsdk/sdk)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
+
 **Your AI keys. Your models. Your rules — on every website.**
 
-[Bring Your Model](https://bringyourmodel.com) is an open-source **AI wallet for Chrome**: users connect their own providers (OpenAI, Anthropic, Google, OpenRouter, Ollama, and more), and websites call AI through a small SDK — without ever touching API keys.
+[Bring Your Model](https://bringyourmodel.com) is an open-source **AI wallet for Chrome**: users connect their own providers (OpenAI, Anthropic, Google, OpenRouter, Ollama, LM Studio, and more), and websites call AI through a small SDK — without ever touching API keys.
 
 Think **MetaMask for AI access** or **Stripe.js for inference**: the extension is the trust boundary; the site gets capabilities, not credentials.
 
@@ -11,7 +15,8 @@ Think **MetaMask for AI access** or **Stripe.js for inference**: the extension i
 | Resource | Link |
 |----------|------|
 | **Website** | [bringyourmodel.com](https://bringyourmodel.com) |
-| **Chrome Extension** | [Install from Chrome Web Store](https://chromewebstore.google.com/detail/jnpajlpoemfgehchogeboncaikdoggdd) |
+| **Live demo** | [bringyourmodel.com/demo](https://bringyourmodel.com/demo/) |
+| **Chrome Extension** | [Install from Chrome Web Store](https://chromewebstore.google.com/detail/byom-wallet/jnpajlpoemfgehchogeboncaikdoggdd) |
 | **npm SDK** | [@byomsdk/sdk on npm](https://www.npmjs.com/package/@byomsdk/sdk) |
 
 ---
@@ -47,14 +52,14 @@ flowchart LR
 3. **Extension** validates the origin, checks grants/budgets, shows consent when needed, routes to the right model, and returns the result.
 4. **API keys never enter the page** — only approved responses do.
 
-Details: [Architecture](docs/architecture.md) · [Security](docs/security.md)
+Details: [Architecture](docs/architecture.md) · [Security](docs/security.md) · [Install](docs/install.md)
 
 ---
 
 ## Who it's for
 
-- **Users** who want one wallet for AI across the web, with spend caps and privacy choices.
-- **Developers** who want AI features without hosting inference or holding user API keys.
+- **Users** who want one wallet for AI across the web, with spend caps and privacy choices — including **local-first** setups with Ollama or LM Studio.
+- **Developers** who want AI features without hosting inference for every visitor. BYOM users route through their vault; everyone else can use your backend via the [fallback helper](docs/fallback-strategy.md).
 - **Builders** integrating BYOM into SaaS, copilots, support tools, and in-page assistants.
 
 ---
@@ -65,8 +70,9 @@ Details: [Architecture](docs/architecture.md) · [Security](docs/security.md)
 |---------|------|
 | [`packages/extension`](packages/extension) | Chrome extension (OpenModelRouter engine, vault, consent UI) |
 | [`packages/sdk`](packages/sdk) | [`@byomsdk/sdk`](https://www.npmjs.com/package/@byomsdk/sdk) — website integration |
+| [`packages/react`](packages/react) | [`@byomsdk/react`](packages/react) — React hooks and install banner |
 | [`packages/shared`](packages/shared) | Zod schemas, protocol types, shared errors |
-| [`packages/demo-site`](packages/demo-site) | Local demo app for SDK + extension |
+| [`packages/demo-site`](packages/demo-site) | Local demo app (also at [bringyourmodel.com/demo](https://bringyourmodel.com/demo/)) |
 | [`packages/e2e`](packages/e2e) | Playwright end-to-end tests |
 
 ---
@@ -90,7 +96,7 @@ pnpm dev
 pnpm --filter @byom/demo-site dev
 ```
 
-Load the built extension from `packages/extension/.output/chrome-mv3` in `chrome://extensions` (Developer mode → Load unpacked).
+Install the extension from the [Chrome Web Store](https://chromewebstore.google.com/detail/byom-wallet/jnpajlpoemfgehchogeboncaikdoggdd), or load a dev build from `packages/extension/.output/chrome-mv3` in `chrome://extensions` (Developer mode → Load unpacked).
 
 ### Build and test
 
@@ -108,18 +114,38 @@ pnpm --filter @byom/extension zip
 ## SDK example
 
 ```typescript
-import { byom } from '@byomsdk/sdk';
+import { byom, createByomWithFallback } from '@byomsdk/sdk';
 
-if (!(await byom.isAvailable())) {
-  throw new Error('Install Bring Your Model to use AI on this site');
-}
+const ai = createByomWithFallback({
+  askFallback: async (req, signal) => {
+    const res = await fetch('/api/ai/ask', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(req),
+      signal,
+    });
+    return res.json();
+  },
+});
 
-const result = await byom.ask({
+const result = await ai.ask({
   task: 'summarize',
   input: 'Long text to summarize...',
 });
 
 console.log(result.text);
+```
+
+**OpenAI-style client:**
+
+```typescript
+import { OpenAI } from '@byomsdk/sdk/openai';
+
+const client = new OpenAI();
+const completion = await client.chat.completions.create({
+  model: 'gpt-4o-mini',
+  messages: [{ role: 'user', content: 'Summarize this page.' }],
+});
 ```
 
 **CDN (IIFE):**
@@ -131,22 +157,28 @@ console.log(result.text);
 </script>
 ```
 
-Full API: [SDK API](docs/sdk-api.md) · [Policy DSL](docs/policy-dsl.md)
+Full API: [SDK API](docs/sdk-api.md) · [Fallback strategy](docs/fallback-strategy.md) · [OpenAI compat](docs/openai-compat.md) · [Prompt API compat](docs/prompt-api-compat.md)
 
 ---
 
 ## Documentation
 
+- [Install](docs/install.md) — extension install
 - [Architecture](docs/architecture.md) — three-realm bridge, ports, message flow
 - [Security](docs/security.md) — vault, nonce replay, prompt shield, consent
 - [SDK API](docs/sdk-api.md) — methods, streaming, errors
+- [Fallback strategy](docs/fallback-strategy.md) — progressive enhancement
+- [OpenAI compatibility](docs/openai-compat.md) — drop-in OpenAI-style client
+- [Prompt API compatibility](docs/prompt-api-compat.md) — LanguageModel shim
+- [Protocol](docs/protocol.md) — wire format and versioning
 - [Policy DSL](docs/policy-dsl.md) — grants, budgets, model allowlists
+- [Roadmap](ROADMAP.md)
 
 ---
 
 ## Contributing
 
-Issues and PRs are welcome. Please avoid committing secrets, build artifacts (`dist/`, `.output/`), or local planning notes — they are listed in [`.gitignore`](.gitignore).
+Issues and PRs are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md). Please avoid committing secrets, build artifacts (`dist/`, `.output/`), or local planning notes.
 
 ---
 

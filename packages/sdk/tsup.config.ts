@@ -4,6 +4,8 @@ export default defineConfig({
   entry: {
     index: 'src/index.ts',
     'byom.iife.min': 'src/index.ts',
+    openai: 'src/openai.ts',
+    'prompt-api': 'src/prompt-api.ts',
   },
   format: ['esm', 'cjs', 'iife'],
   globalName: 'byom',

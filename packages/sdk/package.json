@@ -21,6 +21,26 @@
       "types": "./dist/index.d.ts"
     },
     "./iife": "./dist/byom.iife.min.global.js",
+    "./openai": {
+      "import": {
+        "types": "./dist/openai.d.ts",
+        "default": "./dist/openai.js"
+      },
+      "require": {
+        "types": "./dist/openai.d.ts",
+        "default": "./dist/openai.cjs"
+      }
+    },
+    "./prompt-api": {
+      "import": {
+        "types": "./dist/prompt-api.d.ts",
+        "default": "./dist/prompt-api.js"
+      },
+      "require": {
+        "types": "./dist/prompt-api.d.ts",
+        "default": "./dist/prompt-api.cjs"
+      }
+    },
     "./package.json": "./package.json"
   },
   "files": [

@@ -124,6 +124,97 @@ try {
     defaults: {},
   },
   {
+    id: 'fallback-server',
+    title: 'BYOM with server fallback',
+    description:
+      'Progressive enhancement: use BYOM when available, otherwise call your own backend.',
+    category: 'setup',
+    kind: 'code-only',
+    codeOnly: true,
+    code: `import { createByomWithFallback } from '@byomsdk/sdk';
+
+const ai = createByomWithFallback({
+  askFallback: async (req) => {
+    const res = await fetch('/api/ai/ask', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(req),
+    });
+    if (!res.ok) throw new Error(await res.text());
+    return res.json();
+  },
+});
+
+const { text } = await ai.ask({ input: 'Summarize this page.' });`,
+    defaults: {},
+  },
+  {
+    id: 'install-cta',
+    title: 'Extension install CTA',
+    description: 'Detect extension state and show the right next step for users.',
+    category: 'setup',
+    kind: 'code-only',
+    codeOnly: true,
+    code: `import { createInstallPromptState, getInstallUrl } from '@byomsdk/sdk';
+
+const state = await createInstallPromptState();
+switch (state.recommendedAction) {
+  case 'install-extension':
+    window.location.href = getInstallUrl();
+    break;
+  case 'unlock-vault':
+    alert('Unlock BYOM Wallet in the extension side panel.');
+    break;
+  case 'approve-site':
+    alert('Run an AI action to open the consent dialog.');
+    break;
+  case 'ready':
+    console.log('Ready to use BYOM');
+}`,
+    defaults: {},
+  },
+  {
+    id: 'local-first',
+    title: 'Local-first BYOM only',
+    description:
+      'Ollama/LM Studio path — no server fallback; strong install CTA when extension is missing.',
+    category: 'setup',
+    kind: 'code-only',
+    codeOnly: true,
+    code: `import { byom, getInstallUrl } from '@byomsdk/sdk';
+
+if (!(await byom.isAvailable())) {
+  window.location.href = getInstallUrl();
+  throw new Error('Install BYOM Wallet to use local models');
+}
+
+// Configure Ollama in the extension, set routing to prefer local
+const { text } = await byom.ask({
+  input: 'Summarize using my local model.',
+});`,
+    defaults: {},
+  },
+  {
+    id: 'openai-compat',
+    title: 'OpenAI-compatible client',
+    description: 'Swap your OpenAI import — requests route through BYOM, not your API key.',
+    category: 'setup',
+    kind: 'code-only',
+    codeOnly: true,
+    code: `import { OpenAI } from '@byomsdk/sdk/openai';
+
+const client = new OpenAI();
+
+const completion = await client.chat.completions.create({
+  model: 'gpt-4o-mini',
+  messages: [{ role: 'user', content: 'Summarize this page.' }],
+});
+
+console.log(completion.choices[0].message.content);
+console.log(completion.byom);`,
+    defaults: {},
+  },
+  {
     id: 'summarize-article',
     title: 'Summarize article',
     description:
