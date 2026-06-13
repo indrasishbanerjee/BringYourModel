@@ -1,6 +1,6 @@
 {
   "name": "@byomsdk/sdk",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Bring Your Own Model - SDK for accessing user-owned AI providers via the Bring Your Model browser extension",
   "type": "module",
   "main": "./dist/index.cjs",

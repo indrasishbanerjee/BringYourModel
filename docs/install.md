@@ -33,6 +33,10 @@ Load unpacked from `packages/extension/.output/chrome-mv3`.
 
 ## Try the SDK without cloning
 
+```bash
+npm install @byomsdk/sdk
+```
+
 Visit the live playground: [bringyourmodel.com/demo](https://bringyourmodel.com/demo/)
 
 Install the extension, unlock the vault, add a provider (Ollama for local-first), and approve the demo site when prompted.

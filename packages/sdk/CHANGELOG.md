@@ -1,5 +1,15 @@
 # @byomsdk/sdk
 
+## 0.3.0
+
+### Minor Changes
+
+- Add progressive-enhancement helpers: `createByomWithFallback`, `runWithByomFallback`, `detectByomMode`.
+- Add install prompt utilities: `getInstallUrl`, `createInstallPromptState` (defaults to Chrome Web Store).
+- Add `@byomsdk/sdk/openai` — OpenAI-style client (`chat.completions`, `responses`, `embeddings`).
+- Add `@byomsdk/sdk/prompt-api` — LanguageModel-first Prompt API shim.
+- Export `DEFAULT_CHROME_WEB_STORE_URL` and `DEFAULT_GITHUB_RELEASES_URL`.
+
 ## 0.2.0
 
 ### Minor Changes
