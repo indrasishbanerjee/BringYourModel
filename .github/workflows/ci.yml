@@ -31,6 +31,9 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Build shared workspace dependency
+        run: pnpm --filter @byom/shared build
+
       - name: Prepare WXT types
         run: pnpm --filter @byom/extension exec wxt prepare
 

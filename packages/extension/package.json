@@ -11,7 +11,7 @@
     "zip": "wxt zip",
     "zip:firefox": "wxt zip -b firefox",
     "lint": "eslint entrypoints modules",
-    "typecheck": "wxt prepare && tsc --noEmit",
+    "typecheck": "pnpm --filter @byom/shared build && wxt prepare && tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest"
   },
